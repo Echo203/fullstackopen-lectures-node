@@ -1,0 +1,25 @@
+{
+  "name": "part3-node",
+  "version": "1.0.0",
+  "description": "Fullstackopen tutorial part3",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index.js",
+    "start": "node index.js",
+    "build:ui": "rm -rf build && cd ../frontend/ && npm run build --prod && cp -r build ../backebd",
+    "deploy": "git push heroku main",
+    "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push && npm run deploy",
+    "logs:prod": "heroku logs --tail"
+  },
+  "author": "Me",
+  "license": "MIT",
+  "devDependencies": {
+    "nodemon": "^2.0.12"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "mongoose": "^5.13.5"
+  }
+}
