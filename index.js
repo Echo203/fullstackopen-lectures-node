@@ -18,7 +18,6 @@ const requestLogger = (request, response, next) => {
   console.log("Method:", request.method);
   console.log("Path:  ", request.path);
   console.log("Body:  ", request.body);
-  console.log("Code:", response.statusCode);
   console.log("---");
   next();
 };
@@ -51,21 +50,42 @@ app.get("/api/notes", (request, response, next) => {
 
 app.get("/api/notes/:id", (request, response, next) => {
   Note.findById(request.params.id)
-  .then((note) => {
-    if (note) {
-      response.json(note);
-    } else {
-      response.status(404).end()
-    }
-  })
-  .catch(err => next(err))
+    .then((note) => {
+      if (note) {
+        response.json(note);
+      } else {
+        response.status(404).end();
+      }
+    })
+    .catch((err) => next(err));
 });
 
-app.delete("/api/notes/:id", (request, response) => {
-  const id = Number(request.params.id);
-  notes = notes.filter((n) => n.id !== id);
+//Updating importance
+app.put("/api/notes/:id", (req, res, next) => {
+  const id = req.params.id
+  const body = req.body;
 
-  response.status(204).end();
+  const boilerNote = {
+    content: body.content,
+    important: body.important,
+  };
+
+  Note.findByIdAndUpdate(id, boilerNote, { new: true })
+    .then((updatedNote) => {
+      res.json(updatedNote);
+    })
+    .catch((err) => next(err));
+});
+
+//Deleting note handler
+app.delete("/api/notes/:id", (request, response, next) => {
+  Note.findByIdAndDelete(request.params.id)
+    .then((deletedNote) => {
+      response.status(204).end();
+    })
+    .catch((err) => {
+      next(err);
+    });
 });
 
 //Handler for unknown endpoints
@@ -75,17 +95,17 @@ const unknownEndpoint = (request, response) => {
 
 //Handler for requests with result of errors
 const errorHandler = (err, req, res, next) => {
-  console.error(err.message)
+  console.error(err.message);
 
-  if (err.name === 'CastError') {
-    res.status(400).send({err: 'malformated id syntax'})
+  if (err.name === "CastError") {
+    res.status(400).send({ err: "malformated id syntax" });
   }
 
-  next(err)
-}
+  next(err);
+};
 
 app.use(unknownEndpoint);
-app.use(errorHandler)
+app.use(errorHandler);
 
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
