@@ -24,7 +24,7 @@ const requestLogger = (request, response, next) => {
 app.use(requestLogger);
 
 //Post note
-app.post("/api/notes", (request, response) => {
+app.post("/api/notes", (request, response, next) => {
   const body = request.body;
 
   if (!body.content) {
@@ -36,9 +36,12 @@ app.post("/api/notes", (request, response) => {
     important: body.important || false,
     date: new Date(),
   });
-  note.save().then((savedNote) => {
-    response.json(savedNote);
-  });
+  note
+    .save()
+    .then((savedNote) => {
+      response.json(savedNote);
+    })
+    .catch((err) => next(err));
 });
 
 //Fetching notes (all/single)
@@ -62,7 +65,7 @@ app.get("/api/notes/:id", (request, response, next) => {
 
 //Updating importance
 app.put("/api/notes/:id", (req, res, next) => {
-  const id = req.params.id
+  const id = req.params.id;
   const body = req.body;
 
   const boilerNote = {
@@ -99,6 +102,8 @@ const errorHandler = (err, req, res, next) => {
 
   if (err.name === "CastError") {
     res.status(400).send({ err: "malformated id syntax" });
+  } else if (err.name === "ValidationError") {
+    res.status(400).json({error: err.message})
   }
 
   next(err);
