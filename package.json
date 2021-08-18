@@ -8,6 +8,7 @@
     "dev": "nodemon index.js",
     "start": "node index.js",
     "lint": "eslint .",
+    "lint-fix": "eslint . --fix",
     "build:ui": "rm -rf build && cd ../part1/ && npm run build --prod && cp -r build ../part3-node",
     "deploy": "git push heroku main",
     "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push && npm run deploy",
