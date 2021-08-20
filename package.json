@@ -4,11 +4,11 @@
   "description": "Fullstackopen tutorial part3",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon index.js",
     "start": "node index.js",
+    "test": "jest --verbose",
     "lint": "eslint .",
-    "lint-fix": "eslint . --fix",
+    "lint:fix": "eslint . --fix",
     "build:ui": "rm -rf build && cd ../part1/ && npm run build --prod && cp -r build ../part3-node",
     "deploy": "git push heroku main",
     "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push && npm run deploy",
@@ -17,13 +17,17 @@
   "author": "Me",
   "license": "MIT",
   "devDependencies": {
-    "eslint": "^7.32.0",
     "nodemon": "^2.0.12"
   },
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
+    "eslint": "^7.32.0",
     "express": "^4.17.1",
+    "jest": "^27.0.6",
     "mongoose": "^5.13.5"
+  },
+  "jest": {
+    "testEnvironment": "node"
   }
 }
