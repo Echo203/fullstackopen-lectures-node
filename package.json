@@ -4,9 +4,9 @@
   "description": "Fullstackopen tutorial part3",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon index.js",
-    "start": "node index.js",
-    "test": "jest --verbose",
+    "dev": "cross-env NODE_ENV=development nodemon index.js",
+    "start": "cross-env NODE_ENV=production node index.js",
+    "test": "cross-env NODE_ENV=test jest --verbose --runInBand",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "build:ui": "rm -rf build && cd ../part1/ && npm run build --prod && cp -r build ../part3-node",
@@ -21,11 +21,13 @@
   },
   "dependencies": {
     "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
     "dotenv": "^10.0.0",
     "eslint": "^7.32.0",
     "express": "^4.17.1",
     "jest": "^27.0.6",
-    "mongoose": "^5.13.5"
+    "mongoose": "^5.13.5",
+    "supertest": "^6.1.6"
   },
   "jest": {
     "testEnvironment": "node"
