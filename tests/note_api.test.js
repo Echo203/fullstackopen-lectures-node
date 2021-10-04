@@ -46,7 +46,7 @@ describe('viewing a specific note', () => {
       .get(`/api/notes/${noteToView.id}`)
       .expect(200)
       .expect('Content-Type', /application\/json/)
-      
+
     const processedNoteToView = JSON.parse(JSON.stringify(noteToView))
 
     expect(resultNote.body).toEqual(processedNoteToView)
