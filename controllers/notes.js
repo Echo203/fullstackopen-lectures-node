@@ -3,7 +3,7 @@ const Note = require('../models/note')
 const User = require('../models/user')
 
 notesRouter.get('/', async (request, response) => {
-  const notes = await Note.find({})
+  const notes = await Note.find({}).populate('users', { username: 1, name: 1 })
   response.json(notes)
 })
 
@@ -30,7 +30,7 @@ notesRouter.post('/', async (request, response) => {
 
   const savedNote = await note.save()
   user.notes = user.notes.concat(savedNote._id)
-  await user.save()
+  await User.findByIdAndUpdate(body.userId, user, { new: true })
 
   response.json(savedNote)
 })
