@@ -1,3 +1,4 @@
+const jwt = require('jsonwebtoken')
 const notesRouter = require('express').Router()
 const Note = require('../models/note')
 const User = require('../models/user')
@@ -16,10 +17,25 @@ notesRouter.get('/:id', async (request, response) => {
   }
 })
 
+//JWT veryfication helper - separating token from header
+const getTokenFrom = request => {
+  const authorization = request.get('authorization')
+  if (authorization && authorization.toLowerCase().startsWith('baerer ')) {
+    return authorization.substring(7)
+  }
+  return null
+}
+
 notesRouter.post('/', async (request, response) => {
   const body = request.body
+  const token = getTokenFrom(request)
+  // eslint-disable-next-line no-undef
+  const decodedToken = jwt.verify(token, process.env.SECRET)
+  if (!token || !decodedToken.id) {
+    response.status(401).json({ error: 'missing or invalid token' })
+  }
 
-  const user = await User.findById(body.userId)
+  const user = await User.findById(decodedToken.id)
 
   const note = new Note({
     content: body.content,
