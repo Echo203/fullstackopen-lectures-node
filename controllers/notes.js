@@ -32,7 +32,7 @@ notesRouter.post('/', async (request, response) => {
   // eslint-disable-next-line no-undef
   const decodedToken = jwt.verify(token, process.env.SECRET)
   if (!token || !decodedToken.id) {
-    response.status(401).json({ error: 'missing or invalid token' })
+    return response.status(401).json({ error: 'missing or invalid token' })
   }
 
   const user = await User.findById(decodedToken.id)
