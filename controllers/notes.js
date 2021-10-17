@@ -20,7 +20,7 @@ notesRouter.get('/:id', async (request, response) => {
 //JWT veryfication helper - separating token from header
 const getTokenFrom = request => {
   const authorization = request.get('authorization')
-  if (authorization && authorization.toLowerCase().startsWith('baerer ')) {
+  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
     return authorization.substring(7)
   }
   return null
