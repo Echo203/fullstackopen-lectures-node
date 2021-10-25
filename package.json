@@ -7,6 +7,7 @@
     "dev": "cross-env NODE_ENV=development nodemon index.js",
     "start": "cross-env NODE_ENV=production node index.js",
     "test": "cross-env NODE_ENV=test jest --verbose --runInBand",
+    "start:test": "cross-env NODE_ENV=test node index.js",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "build:ui": "rm -rf build && cd ../part1/ && npm run build --prod && cp -r build ../part3-node",
